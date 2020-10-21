@@ -1,111 +1,123 @@
-import React, { useState, useRef } from 'react'
-import PropTypes from 'prop-types'
-import withStyles from '@material-ui/core/styles/withStyles'
-import CssBaseline from '@material-ui/core/CssBaseline'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import Paper from '@material-ui/core/Paper'
-import Typography from '@material-ui/core/Typography'
-import Divider from '@material-ui/core/Divider'
-import MuiAutoComplete from './components/MuiAutoComplete'
-import suggestionsArray from './suggestionsArray'
+import React, { useState } from "react"
+import { makeStyles } from "@material-ui/core/styles"
+import CssBaseline from "@material-ui/core/CssBaseline"
+import AppBar from "@material-ui/core/AppBar"
+import Toolbar from "@material-ui/core/Toolbar"
+import Paper from "@material-ui/core/Paper"
+import Typography from "@material-ui/core/Typography"
+import IconButton from "@material-ui/core/IconButton"
+import SvgIcon from "@material-ui/core/SvgIcon"
+import Link from "@material-ui/core/Link"
+import MuiAutoComplete from "./components/MuiAutoComplete"
+import countries from "./countries"
 
-const styles = theme => ({
-	appBar: {
-		position: 'relative',
-		paddingRight: 10,
-		paddingLeft: 10
-	},
-	layout: {
-		width: 'auto',
-		marginLeft: theme.spacing(2),
-		marginRight: theme.spacing(2),
-		[theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
-			width: 600,
-			marginLeft: 'auto',
-			marginRight: 'auto'
-		}
-	},
-	paper: {
-		marginTop: theme.spacing(3),
-		marginBottom: theme.spacing(3),
-		padding: theme.spacing(5),
-		[theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
-			marginTop: theme.spacing(8),
-			marginBottom: theme.spacing(8),
-			padding: theme.spacing(3)
-		}
-	}
-})
-
-const App = ({ classes }) => {
-	const listRef = useRef(null)
-	const [ inputValue, setInputValue ] = useState('')
-	const [ flag, setFlag ] = useState(false)
-
-	// Change
-	const handleChange = ({ target: { value } }) => {
-		setFlag(false)
-		if (value.length > 0) setFlag(true)
-
-		setInputValue(value)
-	}
-	// Select
-	const handleSelect = value => {
-		setInputValue(value)
-		setFlag(false)
-	}
-
-	return (
-		<div className="App">
-			<CssBaseline />
-			<AppBar position="static" className={classes.appBar}>
-				<Toolbar>
-					<Typography variant="h6" color="inherit" noWrap>
-						AutoComplete Field
-					</Typography>
-				</Toolbar>
-			</AppBar>
-			<main className={classes.layout}>
-				<Typography variant="h4" align="center" style={{ marginTop: 80, marginBottom: 40 }}>
-					AutoComplete Field
-				</Typography>
-
-				<Typography style={{ marginBottom: 40 }}>
-					Accessible autocomplete field works with keyboard, screen readers, and touch screens. Support UP,
-					Down, ESC, ENTER keys.
-				</Typography>
-				<Paper className={classes.paper}>
-					<MuiAutoComplete
-						suggestionsArray={suggestionsArray}
-						handleChange={handleChange}
-						handleSelect={handleSelect}
-						listRef={listRef}
-						inputValue={inputValue}
-						flag={flag}
-					/>
-				</Paper>
-				<Typography variant="h6">Value{inputValue ? <code>: {inputValue}</code> : ''}</Typography>
-				<Divider style={{ marginTop: 100 }} />
-				<Typography component="p" align="center" style={{ margin: '10px 0' }}>
-					Built with{' '}
-					<span role="img" aria-label="Emojis">
-						❤️
-					</span>{' '}
-					by the{' '}
-					<a href="https://gkstyle.net/" title="GK STYLE">
-						{' '}
-						GK STYLE{' '}
-					</a>
-					team.
-				</Typography>
-			</main>
-		</div>
-	)
+function Copyright() {
+  return (
+    <Typography variant="body2" color="textSecondary" align="center">
+      {"Fork @ "}
+      <Link color="inherit" href="https://github.com/awran5/react-material-ui-autoComplete">
+        Github
+      </Link>
+    </Typography>
+  )
 }
 
-App.propTypes = {
-	classes: PropTypes.object.isRequired
+const useStyles = makeStyles(theme => ({
+  appBar: {
+    position: "relative",
+    paddingRight: 10,
+    paddingLeft: 10
+  },
+  svg: {
+    verticalAlign: "middle"
+  },
+  layout: {
+    width: "auto",
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
+      width: 600,
+      marginLeft: "auto",
+      marginRight: "auto"
+    }
+  },
+  paper: {
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(3),
+    padding: theme.spacing(4),
+    [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
+      marginTop: theme.spacing(8),
+      marginBottom: theme.spacing(8),
+      padding: theme.spacing(4)
+    }
+  },
+  autocomplete: {
+    margin: theme.spacing(3, 0, 2)
+  },
+  title: {
+    padding: theme.spacing(3, 0)
+  }
+}))
+
+const App = () => {
+  const classes = useStyles()
+  const [inputValue, setInputValue] = useState("")
+
+  // Handle Change
+  const handleChange = e => setInputValue(e.target.value)
+
+  // Handle Select
+  const handleSelect = value => setInputValue(value)
+
+  return (
+    <div className="App">
+      <CssBaseline />
+      <AppBar position="static" className={classes.appBar}>
+        <Toolbar>
+          <Typography variant="h6" color="inherit" noWrap>
+            AutoComplete Field
+          </Typography>
+          <IconButton color="inherit" aria-label="Github" style={{ marginLeft: "auto" }}>
+            <Link
+              title="Github"
+              component="a"
+              rel="noopener noreferrer"
+              target="_blank"
+              href="https://github.com/awran5/react-material-ui-autoComplete"
+              color="inherit"
+            >
+              <SvgIcon component="svg" className={classes.svg}>
+                <path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2 0 1.9 1.2 1.9 1.2 1 1.8 2.8 1.3 3.5 1 0-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.2.5-2.3 1.3-3.1-.2-.4-.6-1.6 0-3.2 0 0 1-.3 3.4 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8 0 3.2.9.8 1.3 1.9 1.3 3.2 0 4.6-2.8 5.6-5.5 5.9.5.4.9 1 .9 2.2v3.3c0 .3.1.7.8.6A12 12 0 0 0 12 .3" />
+              </SvgIcon>
+            </Link>
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+      <main className={classes.layout}>
+        <Paper className={classes.paper}>
+          <Typography variant="h4" align="center" className={classes.title}>
+            AutoComplete Field
+          </Typography>
+
+          <Typography variant="body2">
+            Accessible autocomplete field works with keyboard, screen readers, and touch screens. Support <b>Up</b>,
+            <b> Down</b>, <b>Esc</b>, <b>Enter</b> keys.
+          </Typography>
+
+          <div className={classes.autocomplete}>
+            <MuiAutoComplete
+              options={countries}
+              inputValue={inputValue}
+              handleChange={handleChange}
+              handleSelect={handleSelect}
+            />
+          </div>
+        </Paper>
+
+        <Copyright />
+      </main>
+    </div>
+  )
 }
 
-export default withStyles(styles)(App)
+export default App
